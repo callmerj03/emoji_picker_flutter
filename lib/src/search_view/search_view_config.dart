@@ -17,7 +17,14 @@ class SearchViewConfig {
     this.buttonIconColor = Colors.black26,
     this.hintText = 'Search',
     this.customSearchView,
+    this.hintStyle,
+    this.emojiListBgColor,
   });
+  // hint textStyle
+  final TextStyle? hintStyle;
+
+  // emoji list background
+  final Color? emojiListBgColor;
 
   /// Background color of search bar
   final Color backgroundColor;
@@ -41,7 +48,9 @@ class SearchViewConfig {
         other.backgroundColor == backgroundColor &&
         other.buttonColor == buttonColor &&
         other.buttonIconColor == buttonIconColor &&
-        other.hintText == hintText;
+        other.hintText == hintText &&
+        other.emojiListBgColor == emojiListBgColor &&
+        other.hintStyle == hintStyle;
   }
 
   @override
@@ -49,5 +58,7 @@ class SearchViewConfig {
       backgroundColor.hashCode ^
       buttonColor.hashCode ^
       buttonIconColor.hashCode ^
+      hintStyle.hashCode ^
+      emojiListBgColor.hashCode ^
       hintText.hashCode;
 }

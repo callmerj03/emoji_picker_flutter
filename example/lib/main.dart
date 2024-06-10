@@ -104,24 +104,49 @@ class MyAppState extends State<MyApp> {
               Offstage(
                 offstage: !_emojiShowing,
                 child: EmojiPicker(
-                  textEditingController: _controller,
+                  // textEditingController: _controller,
                   scrollController: _scrollController,
+                  // customWidget: (
+                  //   Config config,
+                  //   EmojiViewState state,
+                  //   VoidCallback showSearchBar,
+                  // ) {
+                  //   return DefaultEmojiPickerView(
+                  //     config,
+                  //     state,
+                  //     () {},
+                  //   );
+                  // },
                   config: Config(
                     height: 256,
                     checkPlatformCompatibility: true,
                     emojiViewConfig: EmojiViewConfig(
-                      // Issue: https://github.com/flutter/flutter/issues/28894
-                      emojiSizeMax: 28 *
-                          (foundation.defaultTargetPlatform ==
-                                  TargetPlatform.iOS
-                              ? 1.2
-                              : 1.0),
+                        emojiSizeMax: 28 * (foundation.defaultTargetPlatform == TargetPlatform.iOS ? 1.2 : 1.0),
+                        backgroundColor: Colors.black,
+                        columns: 8,
+                        noRecents: Text(
+                          'No Recents',
+                          style: TextStyle(fontSize: 20, color: Colors.white60),
+                          textAlign: TextAlign.center,
+                        )),
+                    swapCategoryAndBottomBar: true,
+                    skinToneConfig: SkinToneConfig(indicatorColor: Colors.transparent, dialogBackgroundColor: Colors.black, enabled: true),
+                    categoryViewConfig: CategoryViewConfig(
+                      backgroundColor: Colors.black,
                     ),
-                    swapCategoryAndBottomBar: false,
-                    skinToneConfig: const SkinToneConfig(),
-                    categoryViewConfig: const CategoryViewConfig(),
-                    bottomActionBarConfig: const BottomActionBarConfig(),
-                    searchViewConfig: const SearchViewConfig(),
+                    bottomActionBarConfig: const BottomActionBarConfig(
+                        backgroundColor: Colors.black,
+                        showBackspaceButton: false,
+                        buttonColor: Colors.transparent,
+                        buttonIconColor: Colors.white),
+                    searchViewConfig: SearchViewConfig(
+                      backgroundColor: Colors.black,
+                      buttonColor: Colors.white,
+                      buttonIconColor: Colors.white,
+                      hintText: "Search emoji",
+                      hintStyle: TextStyle(color: Colors.white),
+                      emojiListBgColor: Colors.black
+                    ),
                   ),
                 ),
               ),

@@ -138,42 +138,47 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
       return _buildNoRecent();
     }
     // Build page normally
-    return GridView.builder(
-      key: const Key('emojiScrollView'),
-      scrollDirection: Axis.vertical,
-      controller: _scrollController,
-      primary: false,
-      padding: widget.config.emojiViewConfig.gridPadding,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 1,
-        crossAxisCount: widget.config.emojiViewConfig.columns,
-        mainAxisSpacing: widget.config.emojiViewConfig.verticalSpacing,
-        crossAxisSpacing: widget.config.emojiViewConfig.horizontalSpacing,
+    return Container(
+      color: Colors.black,
+      child: GridView.builder(
+        key: const Key('emojiScrollView'),
+        scrollDirection: Axis.vertical,
+        controller: _scrollController,
+        primary: false,
+        padding: widget.config.emojiViewConfig.gridPadding,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: 1,
+          crossAxisCount: widget.config.emojiViewConfig.columns,
+          mainAxisSpacing: widget.config.emojiViewConfig.verticalSpacing,
+          crossAxisSpacing: widget.config.emojiViewConfig.horizontalSpacing,
+        ),
+        itemCount: categoryEmoji.emoji.length,
+        itemBuilder: (context, index) {
+          return addSkinToneTargetIfAvailable(
+            hasSkinTone: categoryEmoji.emoji[index].hasSkinTone,
+            linkKey: categoryEmoji.category.name + categoryEmoji.emoji[index].emoji,
+            child: EmojiCell.fromConfig(
+              emoji: categoryEmoji.emoji[index],
+              emojiSize: emojiSize,
+              emojiBoxSize: emojiBoxSize,
+              categoryEmoji: categoryEmoji,
+              onEmojiSelected: _onSkinTonedEmojiSelected,
+              onSkinToneDialogRequested: _openSkinToneDialog,
+              config: widget.config,
+            ),
+          );
+        },
       ),
-      itemCount: categoryEmoji.emoji.length,
-      itemBuilder: (context, index) {
-        return addSkinToneTargetIfAvailable(
-          hasSkinTone: categoryEmoji.emoji[index].hasSkinTone,
-          linkKey:
-              categoryEmoji.category.name + categoryEmoji.emoji[index].emoji,
-          child: EmojiCell.fromConfig(
-            emoji: categoryEmoji.emoji[index],
-            emojiSize: emojiSize,
-            emojiBoxSize: emojiBoxSize,
-            categoryEmoji: categoryEmoji,
-            onEmojiSelected: _onSkinTonedEmojiSelected,
-            onSkinToneDialogRequested: _openSkinToneDialog,
-            config: widget.config,
-          ),
-        );
-      },
     );
   }
 
   /// Build Widget for when no recent emoji are available
   Widget _buildNoRecent() {
-    return Center(
-      child: widget.config.emojiViewConfig.noRecents,
+    return Container(
+      color: Colors.black,
+      child: Center(
+        child: widget.config.emojiViewConfig.noRecents,
+      ),
     );
   }
 

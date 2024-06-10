@@ -19,20 +19,21 @@ class DefaultSearchViewState extends SearchViewState {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      final emojiSize =
-          widget.config.emojiViewConfig.getEmojiSize(constraints.maxWidth);
-      final emojiBoxSize =
-          widget.config.emojiViewConfig.getEmojiBoxSize(constraints.maxWidth);
+      final emojiSize = widget.config.emojiViewConfig.getEmojiSize(constraints.maxWidth);
+      final emojiBoxSize = widget.config.emojiViewConfig.getEmojiBoxSize(constraints.maxWidth);
 
       return Container(
         color: widget.config.searchViewConfig.backgroundColor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            
             Material(
-              child: SizedBox(
+              child: Container(
+                color: widget.config.searchViewConfig.emojiListBgColor,
                 height: emojiBoxSize + 8.0,
-                child: ListView.builder(
+                child: results.length > 0 ?
+                ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   scrollDirection: Axis.horizontal,
                   itemCount: results.length,
@@ -43,7 +44,7 @@ class DefaultSearchViewState extends SearchViewState {
                       emojiBoxSize,
                     );
                   },
-                ),
+                ) : Center(child: Text("No Data",  style: widget.config.searchViewConfig.hintStyle,)),
               ),
             ),
             Row(
@@ -62,11 +63,14 @@ class DefaultSearchViewState extends SearchViewState {
                   child: TextField(
                     onChanged: onTextInputChanged,
                     focusNode: focusNode,
+                    style: widget.config.searchViewConfig.hintStyle,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: widget.config.searchViewConfig.hintText,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16),
+                      hintStyle: widget.config.searchViewConfig.hintStyle?.copyWith(
+                        color: widget.config.searchViewConfig.hintStyle?.color?.withOpacity(0.7)
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
                     ),
                   ),
                 ),
