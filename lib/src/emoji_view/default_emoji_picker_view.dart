@@ -14,25 +14,20 @@ class DefaultEmojiPickerView extends EmojiPickerView {
   _DefaultEmojiPickerViewState createState() => _DefaultEmojiPickerViewState();
 }
 
-class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
-    with SingleTickerProviderStateMixin, SkinToneOverlayStateMixin {
+class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView> with SingleTickerProviderStateMixin, SkinToneOverlayStateMixin {
   late TabController _tabController;
   late PageController _pageController;
   final _scrollController = ScrollController();
 
   @override
   void initState() {
-    var initCategory = widget.state.categoryEmoji.indexWhere((element) =>
-        element.category == widget.config.categoryViewConfig.initCategory);
+    var initCategory =
+        widget.state.categoryEmoji.indexWhere((element) => element.category == widget.config.categoryViewConfig.initCategory);
     if (initCategory == -1) {
       initCategory = 0;
     }
-    _tabController = TabController(
-        initialIndex: initCategory,
-        length: widget.state.categoryEmoji.length,
-        vsync: this);
-    _pageController = PageController(initialPage: initCategory)
-      ..addListener(closeSkinToneOverlay);
+    _tabController = TabController(initialIndex: initCategory, length: widget.state.categoryEmoji.length, vsync: this);
+    _pageController = PageController(initialPage: initCategory)..addListener(closeSkinToneOverlay);
     _scrollController.addListener(closeSkinToneOverlay);
     super.initState();
   }
@@ -49,27 +44,21 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final emojiSize =
-            widget.config.emojiViewConfig.getEmojiSize(constraints.maxWidth);
-        final emojiBoxSize =
-            widget.config.emojiViewConfig.getEmojiBoxSize(constraints.maxWidth);
+        final emojiSize = widget.config.emojiViewConfig.getEmojiSize(constraints.maxWidth);
+        final emojiBoxSize = widget.config.emojiViewConfig.getEmojiBoxSize(constraints.maxWidth);
         return EmojiContainer(
           color: widget.config.emojiViewConfig.backgroundColor,
           buttonMode: widget.config.emojiViewConfig.buttonMode,
           child: Column(
             children: [
               // Category view or bottom search bar
-              widget.config.swapCategoryAndBottomBar
-                  ? _buildBottomSearchBar()
-                  : _buildCategoryView(),
+              widget.config.swapCategoryAndBottomBar ? _buildBottomSearchBar() : _buildCategoryView(),
 
               // Emoji view
               _buildEmojiView(emojiSize, emojiBoxSize),
 
               // Bottom Search Bar or Category view
-              widget.config.swapCategoryAndBottomBar
-                  ? _buildCategoryView()
-                  : _buildBottomSearchBar(),
+              widget.config.swapCategoryAndBottomBar ? _buildCategoryView() : _buildBottomSearchBar(),
             ],
           ),
         );
@@ -130,55 +119,47 @@ class _DefaultEmojiPickerViewState extends State<DefaultEmojiPickerView>
           );
   }
 
-  Widget _buildPage(
-      double emojiSize, double emojiBoxSize, CategoryEmoji categoryEmoji) {
+  Widget _buildPage(double emojiSize, double emojiBoxSize, CategoryEmoji categoryEmoji) {
     // Display notice if recent has no entries yet
-    if (categoryEmoji.category == Category.RECENT &&
-        categoryEmoji.emoji.isEmpty) {
+    if (categoryEmoji.category == Category.RECENT && categoryEmoji.emoji.isEmpty) {
       return _buildNoRecent();
     }
     // Build page normally
-    return Container(
-      color: Colors.black,
-      child: GridView.builder(
-        key: const Key('emojiScrollView'),
-        scrollDirection: Axis.vertical,
-        controller: _scrollController,
-        primary: false,
-        padding: widget.config.emojiViewConfig.gridPadding,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 1,
-          crossAxisCount: widget.config.emojiViewConfig.columns,
-          mainAxisSpacing: widget.config.emojiViewConfig.verticalSpacing,
-          crossAxisSpacing: widget.config.emojiViewConfig.horizontalSpacing,
-        ),
-        itemCount: categoryEmoji.emoji.length,
-        itemBuilder: (context, index) {
-          return addSkinToneTargetIfAvailable(
-            hasSkinTone: categoryEmoji.emoji[index].hasSkinTone,
-            linkKey: categoryEmoji.category.name + categoryEmoji.emoji[index].emoji,
-            child: EmojiCell.fromConfig(
-              emoji: categoryEmoji.emoji[index],
-              emojiSize: emojiSize,
-              emojiBoxSize: emojiBoxSize,
-              categoryEmoji: categoryEmoji,
-              onEmojiSelected: _onSkinTonedEmojiSelected,
-              onSkinToneDialogRequested: _openSkinToneDialog,
-              config: widget.config,
-            ),
-          );
-        },
+    return GridView.builder(
+      key: const Key('emojiScrollView'),
+      scrollDirection: Axis.vertical,
+      controller: _scrollController,
+      primary: false,
+      padding: widget.config.emojiViewConfig.gridPadding,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        childAspectRatio: 1,
+        crossAxisCount: widget.config.emojiViewConfig.columns,
+        mainAxisSpacing: widget.config.emojiViewConfig.verticalSpacing,
+        crossAxisSpacing: widget.config.emojiViewConfig.horizontalSpacing,
       ),
+      itemCount: categoryEmoji.emoji.length,
+      itemBuilder: (context, index) {
+        return addSkinToneTargetIfAvailable(
+          hasSkinTone: categoryEmoji.emoji[index].hasSkinTone,
+          linkKey: categoryEmoji.category.name + categoryEmoji.emoji[index].emoji,
+          child: EmojiCell.fromConfig(
+            emoji: categoryEmoji.emoji[index],
+            emojiSize: emojiSize,
+            emojiBoxSize: emojiBoxSize,
+            categoryEmoji: categoryEmoji,
+            onEmojiSelected: _onSkinTonedEmojiSelected,
+            onSkinToneDialogRequested: _openSkinToneDialog,
+            config: widget.config,
+          ),
+        );
+      },
     );
   }
 
   /// Build Widget for when no recent emoji are available
   Widget _buildNoRecent() {
-    return Container(
-      color: Colors.black,
-      child: Center(
-        child: widget.config.emojiViewConfig.noRecents,
-      ),
+    return Center(
+      child: widget.config.emojiViewConfig.noRecents,
     );
   }
 
